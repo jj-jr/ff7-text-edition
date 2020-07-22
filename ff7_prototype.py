@@ -23,7 +23,7 @@ class char:
 
 
 class enemy:
-    def __init__(self, name, level, max_hp, current_hp, str, defense, spd, mgatk, mgdef, luck, dex, exp, atb):
+    def __init__(self, name, level, max_hp, current_hp, str, defense, spd, mgatk, mgdef, luck, dex, exp, atb, item, drop_rate):
         self.name = name
         self. level = level
         self.max_hp = max_hp
@@ -37,6 +37,8 @@ class enemy:
         self.dex = dex
         self.exp = exp
         self.atb = atb
+        self.item = item
+        self.drop_rate = drop_rate
 
 class area:
     def __init__(self, name, is_active: bool, encounter_rate, items):
@@ -46,11 +48,9 @@ class area:
         self.items = items
 
 class item:
-    def __init__(self, name, description, effect, quantity):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.effect = effect
-        self.quantity = quantity
 
     def potion(self, target):
 
@@ -93,10 +93,32 @@ add_char(barrett)
 
 ### Inventory / item handling
 
-inventory = []
+items = []
 weapons = []
-item_inventory = []
+item_inventory = {}
 key_items = []
+
+def add_to_inventory(item, quantity):
+    if item not in item_inventory:
+        item_inventory[item] = quantity
+        print('Added ' + str(quantity) + ' ' + item + 's to your inventory.')
+        return item_inventory
+    elif item in item_inventory and quantity > 0:
+        item_inventory[item] += quantity
+        print('Added ' + str(quantity) + ' ' + item + ' to your inventory.')
+        return item_inventory
+    elif item in item_inventory and quantity < 0:
+        item_inventory[item] += quantity
+        print('Removed ' + str(abs(quantity)) + ' ' + item + 's from your inventory.')
+        return item_inventory
+    else:
+        print('Error')
+
+### Creating item objects
+
+potion = item('Potion', 'Restore 100 HP')
+phoenix_down = item('Phoenix Down', 'Revives a downed party member and restores 100 HP')
+ether = item('Ether', 'Restores 40 MP')
 
 
 ### Level handling
@@ -132,8 +154,8 @@ def level_up(character):
 
 ### Initializing enemies
 
-shinra_soldier = enemy(name='Shinra Soldier', level=6, max_hp=300, current_hp=300, str=4, defense=4, spd=9, mgatk=3, mgdef=5, luck=1, dex=5, exp=10, atb=0)
-shinra_mech = enemy(name='Shinra Mech', level=7, max_hp=400, current_hp=400, str=5, defense=6, spd=7, mgatk=3, mgdef=5, luck=2, dex=6, exp=18, atb=0)
+shinra_soldier = enemy(name='Shinra Soldier', level=6, max_hp=300, current_hp=300, str=4, defense=4, spd=9, mgatk=3, mgdef=5, luck=1, dex=5, exp=10, atb=0, item=ether, drop_rate=0.3)
+shinra_mech = enemy(name='Shinra Mech', level=7, max_hp=400, current_hp=400, str=5, defense=6, spd=7, mgatk=3, mgdef=5, luck=2, dex=6, exp=18, atb=0, item=phoenix_down, drop_rate=0.2)
 
 def add_enemy(name):
     print('Added ' + name.name + ' to the list of enemies.')
@@ -164,7 +186,17 @@ add_area(midgar_slums)
 
 ### Beginning of gameplay
 
-tifa.current_hp = 650
+tifa.current_hp = 640
+
+
 
 level_up(cloud)
 item.potion((), tifa)
+add_to_inventory(potion.name, 7)
+print(item_inventory)
+add_to_inventory(potion.name, -2)
+print(item_inventory)
+add_to_inventory(phoenix_down.name, 2)
+print(item_inventory)
+add_to_inventory(potion.name, -3)
+print(item_inventory)
