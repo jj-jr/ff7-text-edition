@@ -1,3 +1,5 @@
+from typing import Type, List
+
 print('')
 print('Initializing all assets.')
 print('')
@@ -56,18 +58,22 @@ class item:
 
         hp_remainder = target.max_hp - target.current_hp
 
-        if target.current_hp <= target.max_hp - 100 and target.current_hp != target.max_hp:
+        # Adding the full 100 HP to a target who is missing 100 or more HP.
+        if target.current_hp <= target.max_hp - 100 and target.current_hp != target.max_hp and target.current_hp != 0:
             target.current_hp += 100
-            print(target.name + ' restored 100 HP! They currently have ' + str(target.current_hp) + ' HP.')
+            print(target.name + ' used a potion and restored 100 HP! They currently have ' + str(target.current_hp) + ' HP.')
             return target.current_hp
-        elif target.current_hp > target.max_hp - 100 and target.current_hp != target.max_hp:#and target.max_hp - target.current_hp < 0:
+        # Adding the potion amount to characters missing less than 100 HP or less.
+        elif target.current_hp > target.max_hp - 100 and target.current_hp != target.max_hp and target.current_hp != 0:
             target.current_hp += hp_remainder
-            print(target.name + ' restored ' + str(hp_remainder) + ' HP! They currently have ' + str(target.current_hp) + ' HP.')
+            print(target.name + ' used a potion and restored ' + str(hp_remainder) + ' HP! They currently have ' + str(target.current_hp) + ' HP.')
             return target.current_hp
+        # Character is already at Max HP
         elif target.current_hp == target.max_hp:
             target.current_hp = target.max_hp
             print(target.name + ' is already at max health. ' + target.name + ' has ' + str(target.max_hp) + ' HP.')
             return target.current_hp
+        # Item can't be used on fallen party members
         elif target.current_hp == 0:
             print('Item cannot be used on a character with 0 HP.')
         else:
@@ -81,15 +87,45 @@ cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, s
 tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14, exp=0, atb=0)
 barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11, exp=0, atb=0)
 
+characters = []
+current_party = {'Cloud': True}
+
 def add_char (name):
     print('Added ' + name.name + ' to the list of characters.')
     return characters.append(name.name)
 
-characters = []
 
 add_char(tifa)
 add_char(cloud)
 add_char(barrett)
+
+
+def add_to_party(char):
+
+    global current_party
+    if current_party.get(char.name) == None:
+        print(char.name + ' joined the party.')
+        current_party[char.name] = True
+        return current_party
+    else:
+        print(char.name + ' is already in the party.')
+        current_party[char.name] = True
+        return current_party
+
+def remove_from_party(char):
+    global current_party
+    if current_party.get(char.name) != None and not len(current_party) <= 1:
+        print(char.name + ' left the party.')
+        current_party.pop(char.name)
+        return current_party
+    elif len(current_party) <= 1 and current_party.get(char.name != None):
+        print('Cannot remove all party members.')
+        return current_party
+    elif current_party.get(char.name) == KeyError:
+        print('Didn\'t recognize that input. Try again with a valid party member.')
+    else:
+        print(char.name + ' isn\'t in your current party.')
+        return current_party
 
 ### Inventory / item handling
 
@@ -135,7 +171,10 @@ def level_up(character):
 
 ### Battle system handling
 
-'''def battle (character: object, enemy: object):
+'''def battle (party, enemy):
+
+    party = current_party
+    enemy = current_enemy
 
     print('A battle has started with ' + enemy + '!')
 
@@ -148,7 +187,8 @@ def level_up(character):
         return atb_char, atb_enemy
 
     while enemy.hp >= 0:
-        if character.atb or enemy.atb >= 100:'''
+        if party.atb or enemy.atb >= 100:'''
+
 
 
 
@@ -162,6 +202,7 @@ def add_enemy(name):
     return enemies.append(name.name)
 
 enemies = []
+current_enemy = {}
 
 add_enemy(shinra_soldier)
 
@@ -186,12 +227,9 @@ add_area(midgar_slums)
 
 ### Beginning of gameplay
 
-tifa.current_hp = 640
-
-
+tifa.current_hp = 0
 
 level_up(cloud)
-item.potion((), tifa)
 add_to_inventory(potion.name, 7)
 print(item_inventory)
 add_to_inventory(potion.name, -2)
@@ -200,3 +238,20 @@ add_to_inventory(phoenix_down.name, 2)
 print(item_inventory)
 add_to_inventory(potion.name, -3)
 print(item_inventory)
+item.potion((), cloud)
+cloud.current_hp = 640
+print('Cloud took 60 damage!')
+item.potion((), cloud)
+print('Cloud took 700 damage from a critical hit! He is at 0 HP.')
+cloud.current_hp = 0
+item.potion((), cloud)
+
+print('')
+add_to_party(cloud)
+add_to_party(cloud)
+add_to_party(tifa)
+remove_from_party(tifa)
+remove_from_party(tifa)
+print(current_party)
+
+print(current_party)
