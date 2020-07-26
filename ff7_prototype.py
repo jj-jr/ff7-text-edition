@@ -83,9 +83,9 @@ class item:
 
 ### Initializing characters
 
-cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, str=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10, exp=0, atb=0)
-tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14, exp=0, atb=0)
-barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11, exp=0, atb=0)
+cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, str=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10, exp=0, atb=1)
+tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14, exp=0, atb=1)
+barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11, exp=0, atb=1)
 
 characters = []
 current_party = {'Cloud': True}
@@ -171,40 +171,83 @@ def level_up(character):
 
 ### Battle system handling
 
-'''def battle (party, enemy):
+def battle (party, enemy):
 
-    party = current_party
-    enemy = current_enemy
+    global current_party
+    global current_enemy
 
-    print('A battle has started with ' + enemy + '!')
 
-    char.atb = 0
-    enemy.atb = 0
+    #party = current_party
+    #enemy = current_enemy
 
-    def atb_step():
-        atb_char = character.spd * 1.2
-        atb_enemy = enemy.spd * 1.2
-        return atb_char, atb_enemy
+    def party_atb(char):
+        party_counter = 0
+        step = 0
+        rate_party = char.spd * 1.2
+        while party_counter < 100:
+            print(round(party_counter))
+            step += 1
+            print(char.name + ' step ' + str(step))
+            party_counter += rate_party
+        return round(party_counter)
 
-    while enemy.hp >= 0:
-        if party.atb or enemy.atb >= 100:'''
+    def enemy_atb(enemy):
+        enemy_counter = 0
+        step = 0
+        rate_enemy = enemy.spd * 1.2
+        while enemy_counter < 100:
+            print(round(enemy_counter))
+            step += 1
+            print(enemy.name + ' step ' + str(step))
+            enemy_counter += rate_enemy
+        return round(enemy_counter)
+
+    while enemy.current_hp > 0 or party.current_hp > 0:
+        enemy.current_hp = enemy.max_hp
+        party.current_hp = party.max_hp
+        party_counter = 0
+        enemy_counter = 0
+        party_attack = party.str * 3
+        enemy_attack = enemy.str * 3
+        print(enemy.current_hp, party.current_hp)
+        if party_counter >= 100:
+            enemy.current_hp -= party_attack
+            print(party.name + ' attacked for ' + str(party_attack))
+            party_counter = 0
+            return enemy.current_hp, party_counter
+        elif enemy_counter >= 100:
+            party.current_hp -= enemy_attack
+            print('Enemy attacked for ' + str(enemy_attack))
+            enemy_counter = 0
+            return party.current_hp, enemy_counter
+        elif party_counter <= 100:
+            print(party_counter)
+            print(party.current_hp)
+        elif enemy_counter <= 100:
+            print(enemy_counter)
+            print(enemy.current_hp)
+        else:
+                print('Error.')
+    else:
+        print('Battle over!')
+      #  break
 
 
 
 
 ### Initializing enemies
 
-shinra_soldier = enemy(name='Shinra Soldier', level=6, max_hp=300, current_hp=300, str=4, defense=4, spd=9, mgatk=3, mgdef=5, luck=1, dex=5, exp=10, atb=0, item=ether, drop_rate=0.3)
-shinra_mech = enemy(name='Shinra Mech', level=7, max_hp=400, current_hp=400, str=5, defense=6, spd=7, mgatk=3, mgdef=5, luck=2, dex=6, exp=18, atb=0, item=phoenix_down, drop_rate=0.2)
+shinra_soldier = enemy(name='Shinra Soldier', level=6, max_hp=300, current_hp=300, str=4, defense=4, spd=9, mgatk=3, mgdef=5, luck=1, dex=5, exp=10, atb=1, item=ether, drop_rate=0.3)
+shinra_mech = enemy(name='Shinra Mech', level=7, max_hp=400, current_hp=400, str=5, defense=6, spd=7, mgatk=3, mgdef=5, luck=2, dex=6, exp=18, atb=1, item=phoenix_down, drop_rate=0.2)
 
-def add_enemy(name):
-    print('Added ' + name.name + ' to the list of enemies.')
-    return enemies.append(name.name)
+#def add_enemy(name):
+    #print('Added ' + name.name + ' to the list of enemies.')
+    #return enemies[name] = name.name
 
-enemies = []
-current_enemy = {}
+enemies = {shinra_mech}
+current_enemy = [shinra_mech]
 
-add_enemy(shinra_soldier)
+#add_enemy(shinra_soldier)
 
 ### Initializing items for areas
 
@@ -243,7 +286,7 @@ cloud.current_hp = 640
 print('Cloud took 60 damage!')
 item.potion((), cloud)
 print('Cloud took 700 damage from a critical hit! He is at 0 HP.')
-cloud.current_hp = 0
+cloud.current_hp = 700
 item.potion((), cloud)
 
 print('')
@@ -255,3 +298,9 @@ remove_from_party(tifa)
 print(current_party)
 
 print(current_party)
+print('')
+print(battle(cloud, shinra_mech))
+
+#print(party_atb(cloud))
+#print(enemy_atb(shinra_mech))
+
