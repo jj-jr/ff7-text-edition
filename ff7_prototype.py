@@ -173,36 +173,92 @@ def level_up(character):
 
 def battle (party, enemy):
 
-    global current_party
-    global current_enemy
+    party.current_hp = party.max_hp
+    enemy.current_hp = enemy.max_hp
+    party_counter = 0
+    enemy_counter = 0
+    enemy_defeat = False
+    party_defeat = False
+    party_attack = party.str * 3
+    enemy_attack = enemy.str * 3
 
+    def party_atb(char, party_counter):
+
+        #global party_counter
+        rate_party = char.spd * 1.2
+        party_counter += rate_party
+        return party_counter
+
+    def enemy_atb(enemy, enemy_counter):
+
+        #global enemy_counter
+        rate_enemy = enemy.spd * 1.2
+        enemy_counter += rate_enemy
+        return enemy_counter
 
     #party = current_party
     #enemy = current_enemy
 
-    def party_atb(char):
+    while enemy_defeat == False and party_defeat == False:
+        print('loop')
+        while party_counter < 100 or enemy_counter < 100:
+            print('1')
+            print(party_atb(party, party_counter))
+            enemy_atb(enemy, enemy_counter)
+            if party_counter >= 100:
+                enemy.current_hp -= party_attack
+                if enemy.current_hp <= 0:
+                    print('Party attack dealt ' + str(party_attack) + ' damage. The enemy has been defeated.')
+                    print('Battle over.')
+                    enemy_defeat = True
+                    break
+                else:
+                    print('Party attack dealt ' + str(party_attack) + ' damage. The enemy has ' + str(enemy.current_hp) + ' HP remaining.')
+                    party_counter = 0
+                    break
+            elif enemy_counter >= 100:
+                party.current_hp -= enemy_attack
+                if party.current_hp <= 0:
+                    print('Party attack dealt ' + str(enemy_attack) + ' damage. The party has been defeated.')
+                    print('Game over.')
+                    party_defeat = True
+                    break
+                else:
+                    print('Enemy attack dealt ' + str(enemy_attack) + ' damage. The party has ' + str(party.current_hp) + ' HP remaining.')
+                    enemy_counter = 0
+                    break
+    else:
+        pass
+
+'''   def party_atb(char):
         party_counter = 0
         step = 0
+        step_total = 0
         rate_party = char.spd * 1.2
-        while party_counter < 100:
+        while party_counter <= 100:
             print(round(party_counter))
             step += 1
             print(char.name + ' step ' + str(step))
             party_counter += rate_party
-        return round(party_counter)
+            print(step)
+        step_total = step
+        print('Step total: ' + str(step_total))
+        return step_total
+        #return round(party_counter)
 
     def enemy_atb(enemy):
         enemy_counter = 0
         step = 0
         rate_enemy = enemy.spd * 1.2
-        while enemy_counter < 100:
+        while enemy_counter <= 100:
             print(round(enemy_counter))
             step += 1
             print(enemy.name + ' step ' + str(step))
             enemy_counter += rate_enemy
-        return round(enemy_counter)
+        return step
+        #return round(enemy_counter) step '''
 
-    while enemy.current_hp > 0 or party.current_hp > 0:
+'''   while battle_active == True:
         enemy.current_hp = enemy.max_hp
         party.current_hp = party.max_hp
         party_counter = 0
@@ -210,27 +266,42 @@ def battle (party, enemy):
         party_attack = party.str * 3
         enemy_attack = enemy.str * 3
         print(enemy.current_hp, party.current_hp)
-        if party_counter >= 100:
-            enemy.current_hp -= party_attack
-            print(party.name + ' attacked for ' + str(party_attack))
-            party_counter = 0
-            return enemy.current_hp, party_counter
-        elif enemy_counter >= 100:
-            party.current_hp -= enemy_attack
-            print('Enemy attacked for ' + str(enemy_attack))
-            enemy_counter = 0
-            return party.current_hp, enemy_counter
-        elif party_counter <= 100:
-            print(party_counter)
-            print(party.current_hp)
-        elif enemy_counter <= 100:
-            print(enemy_counter)
-            print(enemy.current_hp)
+        if enemy.current_hp <= 0:
+            ('You won the battle!')
+            return battle_active == False
+            break
+        elif party.current_hp <= 0:
+            ('Your party has been defeated')
+            return battle_active == False
+            break
         else:
-                print('Error.')
-    else:
-        print('Battle over!')
-      #  break
+            if party_counter >= 100:
+                print('1')
+                enemy.current_hp -= party_attack
+                print(party.name + ' attacked for ' + str(party_attack))
+                party_counter = 0
+                return enemy.current_hp, party_counter
+            elif enemy_counter >= 100:
+                print('2')
+                party.current_hp -= enemy_attack
+                print('Enemy attacked for ' + str(enemy_attack))
+                enemy_counter = 0
+                return party.current_hp, enemy_counter
+            elif party_counter < 100:
+                print('3')
+                party_atb(party)
+                print(party_counter)
+                print(party.current_hp)
+                return party_counter
+            elif enemy_counter < 100:
+                print('4')
+                enemy_atb(enemy)
+                print(enemy_counter)
+                print(enemy.current_hp)
+                return enemy_counter
+            else:
+                print('Error.')'''
+
 
 
 
@@ -296,11 +367,80 @@ add_to_party(tifa)
 remove_from_party(tifa)
 remove_from_party(tifa)
 print(current_party)
-
-print(current_party)
 print('')
-print(battle(cloud, shinra_mech))
+
+#print(battle(cloud, shinra_mech))
+
+'''def party_atb(char):
+    party_counter = 0
+    step = 0
+    rate_party = char.spd * 1.2
+    while party_counter <= 100:
+        #print(round(party_counter))
+        step += 1
+        #print(char.name + ' step ' + str(step))
+        party_counter += rate_party
+        #print(step)
+    print('Step total: ' + str(step))
+    return step
+    # return round(party_counter)'''
+
+'''party_counter = 0
+enemy_counter = 0
+
+def party_atb(char):
+
+    global party_counter
+    rate_party = char.spd * 1.2
+    party_counter += rate_party
+    return party_counter
+
+def enemy_atb(enemy):
+
+    global enemy_counter
+    rate_enemy = enemy.spd * 1.2
+    enemy_counter += rate_enemy
+    return enemy_counter
+
+enemy_hp = 100
+party_hp = 200
+turn_count = 0
+party_defeat = False
+enemy_defeat = False
+
+while enemy_defeat == False and party_defeat == False:
+    while party_counter < 100 or enemy_counter < 100:
+        party_atb(cloud)
+        enemy_atb(shinra_mech)
+        if party_counter >= 100:
+            attack = 40
+            enemy_hp -= attack
+            if enemy_hp <= 0:
+                print('Party attack dealt ' + str(attack) + ' damage. The enemy has been defeated.')
+                print('Battle over.')
+                enemy_defeat = True
+                break
+            else:
+                print('Party attack dealt ' + str(attack) + ' damage. The enemy has ' + str(enemy_hp) + ' HP remaining.')
+            party_counter = 0
+            break
+        elif enemy_counter >= 100:
+            enemy_attack = 80
+            party_hp -= enemy_attack
+            if party_hp <= 0:
+                print('Party attack dealt ' + str(enemy_attack) + ' damage. The party has been defeated.')
+                print('Game over.')
+                party_defeat = True
+                break
+            else:
+                print('Enemy attack dealt ' + str(enemy_attack) + ' damage. The party has ' + str(party_hp) + ' HP remaining.')
+            enemy_counter = 0
+            break
+else:
+    pass'''
+
 
 #print(party_atb(cloud))
 #print(enemy_atb(shinra_mech))
+print(battle(cloud, shinra_mech))
 
