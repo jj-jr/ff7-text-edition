@@ -7,7 +7,7 @@ print('')
 ### Object handling
 
 class char:
-    def __init__(self, name, level, in_party: bool, max_hp, current_hp, str, defense, spd, mgatk, mgdef, luck, dex, exp, atb):
+    def __init__(self, name, level, in_party: bool, max_hp, current_hp, str, defense, spd, mgatk, mgdef, luck, dex, exp=0, atb=0):
         self.name = name
         self.level = level
         self.in_party = in_party
@@ -50,9 +50,10 @@ class area:
         self.items = items
 
 class item:
-    def __init__(self, name, description):
+    def __init__(self, name, description, quantity=0):
         self.name = name
         self.description = description
+        self.quantity = quantity
 
     def potion(self, target):
 
@@ -61,13 +62,15 @@ class item:
         # Adding the full 100 HP to a target who is missing 100 or more HP.
         if target.current_hp <= target.max_hp - 100 and target.current_hp != target.max_hp and target.current_hp != 0:
             target.current_hp += 100
+            self.quantity - 1
             print(target.name + ' used a potion and restored 100 HP! They currently have ' + str(target.current_hp) + ' HP.')
-            return target.current_hp
+            return target.current_hp, self.quantity
         # Adding the potion amount to characters missing less than 100 HP or less.
         elif target.current_hp > target.max_hp - 100 and target.current_hp != target.max_hp and target.current_hp != 0:
             target.current_hp += hp_remainder
+            self.quantity - 1
             print(target.name + ' used a potion and restored ' + str(hp_remainder) + ' HP! They currently have ' + str(target.current_hp) + ' HP.')
-            return target.current_hp
+            return target.current_hp, self.quantity
         # Character is already at Max HP
         elif target.current_hp == target.max_hp:
             target.current_hp = target.max_hp
@@ -83,9 +86,9 @@ class item:
 
 ### Initializing characters
 
-cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, str=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10, exp=0, atb=1)
-tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14, exp=0, atb=1)
-barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11, exp=0, atb=1)
+cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, str=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10)
+tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
+barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11)
 
 characters = []
 current_party = {'Cloud': True}
@@ -137,22 +140,25 @@ key_items = []
 def add_to_inventory(item, quantity):
     if item not in item_inventory:
         item_inventory[item] = quantity
+        item.quantity += quantity
         print('Added ' + str(quantity) + ' ' + item + 's to your inventory.')
-        return item_inventory
+        return item_inventory, item.quantity
     elif item in item_inventory and quantity > 0:
         item_inventory[item] += quantity
+        item.quantity += quantity
         print('Added ' + str(quantity) + ' ' + item + ' to your inventory.')
-        return item_inventory
+        return item_inventory, item.quantity
     elif item in item_inventory and quantity < 0:
         item_inventory[item] += quantity
+        item.quantity += quantity, item.quantity
         print('Removed ' + str(abs(quantity)) + ' ' + item + 's from your inventory.')
-        return item_inventory
+        return item_inventory, item.quantity
     else:
         print('Error')
 
 ### Creating item objects
 
-potion = item('Potion', 'Restore 100 HP')
+potion = item('Potion', 'Restore 100 HP', 0)
 phoenix_down = item('Phoenix Down', 'Revives a downed party member and restores 100 HP')
 ether = item('Ether', 'Restores 40 MP')
 
@@ -173,7 +179,6 @@ def level_up(character):
 
 def battle (party, enemy):
 
-    #party.current_hp = party.max_hp
     enemy.current_hp = enemy.max_hp
     party_counter = 0
     enemy_counter = 0
@@ -194,36 +199,30 @@ def battle (party, enemy):
         atb += rate_enemy
         return round(atb)
 
-    #party = current_party
-    #enemy = current_enemy
-
     while enemy_defeat == False and party_defeat == False:
-        #print('Begin loop.')
         while party_counter < 100 or enemy_counter < 100:
             party_counter = party_atb(party, party_counter)
-            #print('Party ATB is ' + str(party_counter))
             enemy_counter = enemy_atb(enemy, enemy_counter)
-            #print('Enemy ATB is ' + str(enemy_counter))
             if party_counter >= 100:
                 enemy.current_hp -= party_attack
                 if enemy.current_hp <= 0:
-                    print('Party attack dealt ' + str(party_attack) + ' damage. The enemy has been defeated.')
+                    print(party.name + ' dealt ' + str(party_attack) + ' damage. ' + enemy.name + ' has been defeated.')
                     print('Battle over.')
                     enemy_defeat = True
                     break
                 else:
-                    print('Party attack dealt ' + str(party_attack) + ' damage. The enemy has ' + str(enemy.current_hp) + ' HP remaining.')
+                    print(party.name + ' dealt ' + str(party_attack) + ' damage. ' + enemy.name + ' has ' + str(enemy.current_hp) + ' HP remaining.')
                     party_counter = 0
                     break
             elif enemy_counter >= 100:
                 party.current_hp -= enemy_attack
                 if party.current_hp <= 0:
                     party_defeat = True
-                    print('Enemy attack dealt ' + str(enemy_attack) + ' damage. The party has been defeated.')
+                    print(enemy.name + ' dealt ' + str(enemy_attack) + ' damage. ' + party.name + ' has been defeated.')
                     print('Game over.')
                     break
                 else:
-                    print('Enemy attack dealt ' + str(enemy_attack) + ' damage. The party has ' + str(party.current_hp) + ' HP remaining.')
+                    print(enemy.name + ' dealt ' + str(enemy_attack) + ' damage. ' + party.name + ' has ' + str(party.current_hp) + ' HP remaining.')
                     enemy_counter = 0
                     break
     else:
@@ -294,5 +293,10 @@ print('')
 
 tifa.current_hp = 200
 
-battle(barrett, shinra_soldier)
+battle(cloud, shinra_soldier)
+
+print('Potion quantity is ' + str(potion.quantity))
+print('Cloud ATB is ' + str(cloud.atb))
+
+remove_from_party(barrett)
 
