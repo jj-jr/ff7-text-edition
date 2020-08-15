@@ -3,6 +3,7 @@ import random
 
 ### Battle system handling
 
+<<<<<<< HEAD
 '''def battle (party, enemy):
 
     enemy.current_hp = enemy.max_hp
@@ -81,6 +82,8 @@ actions = ['Attack', 'Item']
 
 ### Multiple party members / enemies attempt
 
+=======
+>>>>>>> minor-changes-and-syncing
 def battle (party, enemy):
 
     total_gil = 0
@@ -89,7 +92,10 @@ def battle (party, enemy):
     party_defeat = False
     party_action = False
     enemy_action = False
+<<<<<<< HEAD
     characters.actions = actions
+=======
+>>>>>>> minor-changes-and-syncing
     all_combatants = party + enemy
 
     for bad_guy in enemy:
