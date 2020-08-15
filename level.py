@@ -9,12 +9,4 @@ def level_up(character):
     character.level += 1
     return character.level
 
-<<<<<<< HEAD
 cloud_exp_threshold = [10, 50, 150]
-tifa_exp_threshold = [10, 50, 150]
-barret_exp_threshold = [20, 60, 175]
-
-cloud_str_level = [2, 3, 1]
-=======
-cloud_exp_threshold = [10, 50, 150]
->>>>>>> minor-changes-and-syncing

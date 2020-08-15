@@ -25,7 +25,3 @@ areas = []
 
 add_area(shinra_reactor)
 add_area(midgar_slums)
-<<<<<<< HEAD
-
-=======
->>>>>>> minor-changes-and-syncing
