@@ -1,7 +1,7 @@
 ### Character object handling
 
 class char:
-    def __init__(self, name, level, in_party: bool, max_hp, current_hp, max_mp, current_mp, str, defense, spd, mgatk, mgdef, luck, dex, exp=0, atb=0):
+    def __init__(self, name, level, in_party: bool, max_hp, current_hp, max_mp, current_mp, str, defense, spd, mgatk, mgdef, luck, dex, exp=0, atb=0, actions=['Attack', 'Item']):
         self.name = name
         self.level = level
         self.in_party = in_party
@@ -18,16 +18,17 @@ class char:
         self.dex = dex
         self.exp = exp
         self.atb = atb
+        self.actions = actions
 
 ### Initializing characters
 
 cloud = char(name='Cloud', level=7, in_party=True, max_hp=700, current_hp=700, max_mp=50, current_mp=50, str=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10)
-tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, max_mp=60, current_mp=60, str=10, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
+tifa = char(name='Tifa', level=7, in_party=False, max_hp=650, current_hp=650, max_mp=60, current_mp=60, str=13, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
 barrett = char(name='Barrett', level=7, in_party=False, max_hp=900, current_hp=900, max_mp=30, current_mp=30, str=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11)
 
 ### Party management
 
-def add_to_party(char):
+'''def add_to_party(char):
 
     global current_party
     if current_party.get(char.name) == None:
@@ -55,12 +56,42 @@ def remove_from_party(char):
         return current_party
 
 characters = []
-current_party = {'Cloud': True}
+current_party = {'Cloud': True}'''
+
+def add_to_party(char):
+
+    if char not in current_party:
+        print(char.name + ' joined the party.')
+        char.in_party = True
+        current_party.append(char)
+        return current_party, char.in_party
+    else:
+        print(char.name + ' is already in the party.')
+        return current_party
+
+def remove_from_party(char):
+
+    if char in current_party and not len(current_party) <= 1:
+        print(char.name + ' left the party.')
+        char.in_party = False
+        current_party.remove(char)
+        return current_party, char.in_party
+    elif len(current_party) <= 1 and char in current_party:
+        print('Cannot remove all party members.')
+        return current_party
+    else:
+        print(char.name + ' isn\'t in your current party.')
+        return current_party
+
+characters = []
+current_party = [cloud]
 
 def add_char (name):
-    print('Added ' + name.name + ' to the list of characters.')
+    #print('Added ' + name.name + ' to the list of characters.')
     return characters.append(name.name)
 
 add_char(tifa)
 add_char(cloud)
 add_char(barrett)
+
+actions = ['Attack', 'Item']

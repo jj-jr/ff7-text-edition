@@ -18,11 +18,10 @@ shinra_reactor = area(name='Shinra Reactor', is_active=True, encounter_rate=30, 
 midgar_slums = area(name='Midgar Slums', is_active=False, encounter_rate=50, items=[midgar_items])
 
 def add_area(name):
-    print('Added ' + name.name + ' to the list of areas.')
+    #print('Added ' + name.name + ' to the list of areas.')
     return areas.append(name.name)
 
 areas = []
 
 add_area(shinra_reactor)
 add_area(midgar_slums)
-
