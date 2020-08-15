@@ -4,6 +4,7 @@ print('')
 print('Initializing all assets.')
 print('')
 
+<<<<<<< Updated upstream
 ### Object handling
 
 class char:
@@ -299,4 +300,34 @@ print('Potion quantity is ' + str(potion.quantity))
 print('Cloud ATB is ' + str(cloud.atb))
 
 remove_from_party(barrett)
+=======
+#print(level.cloud_exp_threshold)
+
+### Beginning of gameplay
+
+'''char.cloud.current_hp = 422
+items.use_hi_potion(char.barrett, char.cloud)
+char.cloud.current_mp = 22
+items.use_turbo_ether(char.cloud, char.cloud)
+items.use_phoenix_down(char.barrett, char.cloud)
+char.cloud.current_hp = 0
+items.use_phoenix_down(char.barrett, char.cloud)
+char.cloud.current_hp = 72
+items.use_molotov_cocktail(enemies.shinra_soldier, char.cloud)
+inventory.add_to_inventory(items.potion, 0)
+print(char.cloud.exp)
+print(level.cloud_exp_threshold)
+print('Total gil is: ' + str(inventory.gil))
+print(inventory.item_inventory)
+char.add_to_party(char.barrett)
+char.add_to_party(char.tifa)'''
+
+enemies = [enemies.shinra_mech, enemies.shinra_soldier, enemies.shinra_dog]
+current_party = [char.cloud, char.tifa, char.barrett]
+
+b.battle(current_party, enemies)
+print('Total gil is: ' + str(inventory.gil))
+print(inventory.item_inventory)
+print(art.tifa_image)
+>>>>>>> Stashed changes
 
