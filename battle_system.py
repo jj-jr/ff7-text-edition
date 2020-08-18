@@ -1,4 +1,4 @@
-import level, inventory, characters_playable as characters, enemies
+import level, inventory, characters_playable as characters, enemies, common_functions as cf
 import random
 
 ### Battle system handling
@@ -12,11 +12,13 @@ def battle (party, enemy):
     party_action = False
     enemy_action = False
     all_combatants = party + enemy
+    last_party_member_alive = bool
 
     for bad_guy in enemy:
         bad_guy.current_hp = bad_guy.max_hp
         total_exp += bad_guy.exp
         total_gil += bad_guy.gil
+        bad_guy.atb = 0
 
     for good_guys in party:
         good_guys.atb = 0
@@ -39,6 +41,25 @@ def battle (party, enemy):
         for bad_guy in enemy:
             print('* Press ' + str(counter) + ' for ' + bad_guy.name)
             counter += 1
+
+    def enemy_target(party):
+        return random.choice(party)
+
+    def party_ko(party):
+        #party_ko = bool
+        ko_count = 0
+        for good_guys in party:
+            if good_guys.current_hp <= 0:
+                ko_count += 1
+            else:
+                pass
+        if ko_count == 2:
+            last_party_member_alive = True
+            return last_party_member_alive
+        else:
+            last_party_member_alive = False
+            return last_party_member_alive
+
 
     def turn_input_list(actions):
         print('')
@@ -81,7 +102,7 @@ def battle (party, enemy):
         print('Your party encountered ' + enemy[0].name + ' and ' + enemy[1].name + '!')
         #print('')
     else:
-        print(f'Your party encountered {enemy[0].name}, {enemy[1].name}, and a {enemy[2].name} !')
+        print(f'Your party encountered {enemy[0].name}, {enemy[1].name}, and {enemy[2].name}!')
 
 
     while enemy_defeat is False and party_defeat is False:
@@ -102,9 +123,9 @@ def battle (party, enemy):
 
         elif party_action is True:
             print('')
-            print(f"It\'s {combatant.name}\'s turn!")
-            attack_randomizer = round(random.randint(round(int((-1 * ((0.3 * combatant.str))))), round(int(((0.3 * combatant.str))))))
-            party_attack = combatant.str * 3
+            print(f"It\'s {combatant.name}\'s turn.")
+            attack_randomizer = round(random.randint(round(int((-1 * ((0.3 * combatant.str_))))), round(int(((0.3 * combatant.str_))))))
+            party_attack = combatant.str_ * 3
             party_attack += attack_randomizer
             combatant.atb = 0
             answer = turn_input(combatant)
@@ -132,18 +153,29 @@ def battle (party, enemy):
         else:
             # if the enemy has 100 ATB
             for combatant in enemy:
-                enemy_attack = combatant.str * 3
+                enemy_attack = combatant.str_ * 3
+                target = enemy_target(party)
                 if combatant.atb >= 100:
-                    party[0].current_hp -= enemy_attack
+                    print('')
+                    print('*****')
+                    print('ENEMY TURN')
+                    print('*****')
+                    target.current_hp -= enemy_attack
                     combatant.atb = 0
-                    if party[0].current_hp <= 0:
+                    if target.current_hp <= 0 and last_party_member_alive is True:
                         # Have to add conditional code here if the party member killed is the last one in the party then it's game over, otherwise make it so the character can't be targeted.
                         party_defeat = True
-                        print(combatant.name + ' attacked and dealt ' + str(enemy_attack) + ' damage. ' + party[0].name + ' has been defeated!')
+                        cf.space()
+                        print(combatant.name + ' attacked and dealt ' + str(enemy_attack) + ' damage. The party has been defeated!')
                         print('Game over.')
                         break
+                    elif target.current_hp <= 0 and last_party_member_alive is False:
+                        cf.space()
+                        print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(enemy_attack) + ' damage. ' + target.name + ' has been defeated!')
+                        enemy_action = False
                     else:
-                        print(combatant.name + ' attacked and dealt ' + str(enemy_attack) + ' damage. ' + party[0].name + ' has ' + str(party[0].current_hp) + ' HP remaining.')
+                        cf.space()
+                        print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(enemy_attack) + ' damage. ' + target.name + ' has ' + str(target.current_hp) + ' HP remaining.')
                         enemy_action = False
                 else:
                     continue
@@ -152,19 +184,22 @@ def battle (party, enemy):
 
     if enemy_defeat == True:
         print('')
-        print('The party gained ' + str(total_exp) + ' EXP and ' + str(total_gil) + ' gil!')
+        print('The party gained ' + str(total_exp) + ' EXP and ' + str(total_gil) + ' gil.')
+        print('')
         inventory.gil += total_gil
+
+        for good_guys in party:
+            good_guys.exp += total_exp
+            if good_guys.exp > good_guys.level_threshold[0]:
+                level.level_up(good_guys)
+            else:
+                pass
+
         for bad_guy in enemy:
             if random.random() <= bad_guy.drop_rate:
-                print(bad_guy.name + ' dropped a ' + bad_guy.item.name + ' and it has been added to your inventory!')
+                print(bad_guy.name + ' dropped a ' + bad_guy.item.name + ' and it has been added to your inventory.')
                 print('')
                 return inventory.add_to_inventory(bad_guy.item, 1)
             else:
                 pass
     print('')
-
-    if characters.cloud.exp >= level.cloud_exp_threshold[0]:
-        level.level_up(characters.cloud)
-        return level.cloud_exp_threshold.pop(0)
-    else:
-        pass
