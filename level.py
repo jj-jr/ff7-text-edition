@@ -1,6 +1,10 @@
 import characters_playable as char
 import random
 
+def rnd(num_1, num_2):
+    random_number = random.randint(num_1, num_2)
+    return random_number
+
 ### Level handling
 
 char.cloud.level_threshold = [10, 50, 150, 275, 500]
@@ -25,7 +29,7 @@ class stat_up:
 
 ## Cloud
 
-cloud_hp_increase = {8: random.randint(30,40), 9: random.randint(40,50)}
+cloud_hp_increase = {8: random.randint(30,40), 9: random.randint(45,55)}
 cloud_mp_increase = {8: random.randint(30,40), 9: random.randint(40,50)}
 cloud_str_increase = {8: random.randint(3,5), 9: random.randint(4,6)}
 cloud_defense_increase = {8: random.randint(3,5), 9: random.randint(4,6)}
@@ -65,6 +69,9 @@ barret_stat_up = stat_up(hp=barret_hp_increase, mp=barret_mp_increase, str_=barr
 
 stat_container = {char.cloud.name: cloud_stat_up, char.tifa.name: tifa_stat_up, char.barret.name: barret_stat_up}
 
+#def value_increase(level):
+
+
 def level_up(character):
     print('******')
     print(character.name + ' leveled up!')
@@ -72,8 +79,24 @@ def level_up(character):
     print('******')
     print('')
     character.level += 1
-    #if character.name in stat_container:
-    #    get
 
 
     #return character.level
+
+'''def cloud_level_up():
+    print('******')
+    print(char.cloud.name + ' leveled up!')
+    print(char.cloud.name + ' is now level ' + str(char.cloud.level) + '.')
+    print('******')
+    print('')
+    char.cloud.level += 1
+    level = char.cloud.level
+    char.cloud.max_hp = cloud_stat_up.hp[level]
+    char.cloud.max_mp = cloud_stat_up.mp[level]
+    char.cloud.str_ = cloud_stat_up.str_[level]
+    char.cloud.defense = cloud_stat_up.defense[level]
+    char.cloud.spd = cloud_stat_up.spd[level]
+    char.cloud.mgatk = cloud_stat_up.mgatk[level]
+    char.cloud.mgdef = cloud_stat_up.mgdef[level]
+    char.cloud.luck = cloud_stat_up.luck[level]
+    char.cloud.dex = cloud_stat_up.dex[level]'''''

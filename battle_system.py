@@ -46,7 +46,6 @@ def battle (party, enemy):
         return random.choice(party)
 
     def party_ko(party):
-        #party_ko = bool
         ko_count = 0
         for good_guys in party:
             if good_guys.current_hp <= 0:
@@ -162,6 +161,7 @@ def battle (party, enemy):
                     print('*****')
                     target.current_hp -= enemy_attack
                     combatant.atb = 0
+                    party_ko(party)
                     if target.current_hp <= 0 and last_party_member_alive is True:
                         # Have to add conditional code here if the party member killed is the last one in the party then it's game over, otherwise make it so the character can't be targeted.
                         party_defeat = True
@@ -191,7 +191,7 @@ def battle (party, enemy):
         for good_guys in party:
             good_guys.exp += total_exp
             if good_guys.exp > good_guys.level_threshold[0]:
-                level.level_up(good_guys)
+                characters.level_up(good_guys)
             else:
                 pass
 
