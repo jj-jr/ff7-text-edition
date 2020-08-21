@@ -1,4 +1,4 @@
-import level, common_functions as cf
+import common_functions as cf
 import random
 
 ### Character object handling
@@ -28,7 +28,7 @@ class char:
 ### Initializing characters
 
 cloud = char(name='Cloud', level=7, level_threshold=[], in_party=True, max_hp=322, current_hp=700, max_mp=50, current_mp=50, str_=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10)
-tifa = char(name='Tifa', level=7, level_threshold=[], in_party=False, max_hp=325, current_hp=650, max_mp=60, current_mp=60, str_=13, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
+tifa = char(name='Tifa', level=7, level_threshold=[], in_party=False, max_hp=325, current_hp=650, max_mp=50, current_mp=60, str_=13, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
 barret = char(name='Barret', level=7, level_threshold=[], in_party=False, max_hp=350, current_hp=900, max_mp=30, current_mp=30, str_=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11)
 
 ### Party management
@@ -79,39 +79,45 @@ def rnd(num_1, num_2):
 
 ## Cloud
 
-cloud_hp_increase = {8: rnd(323, 334), 9: rnd(351, 372)}
-cloud_mp_increase = {8: rnd(30, 40), 9: rnd(40, 50)}
-cloud_str_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_defense_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_spd_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_mgatk_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_mgdef_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_luck_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-cloud_dex_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
+cloud.level_threshold = [10, 50, 150, 275, 500]
 
-## Tifa
-
-tifa_hp_increase = {8: rnd(332, 353), 9: rnd(354, 372)}
-tifa_mp_increase = {8: rnd(30, 40), 9: rnd(40, 50)}
-tifa_str_increase = {8: rnd(4, 6), 9: rnd(5, 7)}
-tifa_defense_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-tifa_spd_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-tifa_mgatk_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-tifa_mgdef_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-tifa_luck_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-tifa_dex_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
+cloud_hp_increase = {8: rnd(323, 334), 9: rnd(351, 372), 10: rnd(373, 391), 11: rnd(392, 410), 12: rnd(439, 464), 13: rnd(476, 510)}
+cloud_mp_increase = {8: rnd(57, 63), 9: rnd(66, 69), 10: rnd(71, 76), 11: rnd(77, 82), 12: rnd(89, 94), 13: rnd(95, 101)}
+cloud_str_increase = {8: rnd(20, 24), 9: rnd(25, 26), 10: rnd(27, 28), 11: rnd(29, 30), 12: rnd(31, 32), 13: rnd(33, 34)}
+cloud_defense_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+cloud_spd_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+cloud_mgatk_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+cloud_mgdef_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+cloud_luck_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+cloud_dex_increase = {8: rnd(8, 12), 9: rnd(13, 14), 10: rnd(15, 16), 11: rnd(17, 18), 12: rnd(19, 20), 13: rnd(21, 22)}
 
 ## Barret
 
-barret_hp_increase = {8: rnd(354, 378), 9: rnd(379, 400)}
-barret_mp_increase = {8: rnd(50, 70), 9: rnd(50, 70)}
-barret_str_increase = {8: rnd(3, 5), 9: rnd(3, 5)}
-barret_defense_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-barret_spd_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-barret_mgatk_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-barret_mgdef_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-barret_luck_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
-barret_dex_increase = {8: rnd(3, 5), 9: rnd(4, 6)}
+barret.level_threshold = [10, 50, 150, 275, 500]
+
+barret_hp_increase = {8: rnd(354, 378), 9: rnd(379, 400), 10: rnd(401, 422), 11: rnd(423, 444), 12: rnd(484, 511), 13: rnd(551, 578)}
+barret_mp_increase = {8: rnd(52, 55), 9: rnd(57, 61), 10: rnd(63, 67), 11: rnd(68, 72), 12: rnd(75, 80), 13: rnd(82, 87)}
+barret_str_increase = {8: rnd(19, 22), 9: rnd(23, 25), 10: rnd(26, 27), 11: rnd(28, 29), 12: rnd(30, 31), 13: rnd(32, 33)}
+barret_defense_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+barret_spd_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+barret_mgatk_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+barret_mgdef_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+barret_luck_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+barret_dex_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+
+## Tifa
+
+tifa.level_threshold = [10, 50, 150, 275, 500]
+
+tifa_hp_increase = {8: rnd(332, 353), 9: rnd(354, 372), 10: rnd(373, 391), 11: rnd(392, 410), 12: rnd(430, 455), 13: rnd(468, 496)}
+tifa_mp_increase = {8: rnd(55, 58), 9: rnd(60, 64), 10: rnd(66, 70), 11: rnd(72, 76), 12: rnd(79, 84), 13: rnd(86, 91)}
+tifa_str_increase = {8: rnd(16, 21), 9: rnd(22, 23), 10: rnd(24, 25), 11: rnd(26, 27), 12: rnd(28, 29), 13: rnd(30, 31)}
+tifa_defense_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+tifa_spd_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+tifa_mgatk_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+tifa_mgdef_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+tifa_luck_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
+tifa_dex_increase = {8: rnd(16, 20), 9: rnd(21, 22), 10: rnd(23, 24), 11: rnd(25, 26), 12: rnd(27, 28), 13: rnd(29, 30)}
 
 ### Stat mapping and level handling
 

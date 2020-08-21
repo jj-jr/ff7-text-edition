@@ -1,3 +1,4 @@
+from typing import Type, List
 import items
 
 class enemy:
@@ -27,7 +28,6 @@ shinra_soldier = enemy(name='Shinra Soldier', level=6, max_hp=50, current_hp=50,
 shinra_mech = enemy(name='Shinra Mech', level=7, max_hp=125, current_hp=125, max_mp=50, current_mp=50, str_=5, defense=6, spd=7, mgatk=3, mgdef=5, luck=2, dex=6, exp=18, gil=25, atb=1, item=items.phoenix_down, drop_rate=0.2)
 shinra_dog = enemy(name='Shinra Dog', level=5, max_hp=40, current_hp=40, max_mp=50, current_mp=50, str_=4, defense=4, spd=9, mgatk=3, mgdef=5, luck=1, dex=5, exp=10, gil=100, atb=1, item=items.potion, drop_rate=0.9)
 
-enemies = []
 current_enemies = []
 
 #def add_enemy(name):
