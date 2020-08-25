@@ -5,7 +5,7 @@ import random
 
 class char:
     """Creating class for all playable characters."""
-    def __init__(self, name, level, level_threshold, in_party: bool, max_hp, current_hp, max_mp, current_mp, str_, defense, spd, mgatk, mgdef, luck, dex, exp=0, atb=0, actions=['Attack', 'Item']):
+    def __init__(self, name, level, level_threshold, in_party: bool, ko: bool, max_hp, current_hp, max_mp, current_mp, str_, defense, spd, mgatk, mgdef, luck, dex, exp=0, atb=0, actions=['Attack', 'Item']):
         self.name = name
         self.level = level
         self.level_threshold = level_threshold
@@ -24,12 +24,13 @@ class char:
         self.exp = exp
         self.atb = atb
         self.actions = actions
+        self.ko = ko
 
 ### Initializing characters
 
-cloud = char(name='Cloud', level=7, level_threshold=[], in_party=True, max_hp=322, current_hp=700, max_mp=50, current_mp=50, str_=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10)
-tifa = char(name='Tifa', level=7, level_threshold=[], in_party=False, max_hp=325, current_hp=650, max_mp=50, current_mp=60, str_=13, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
-barret = char(name='Barret', level=7, level_threshold=[], in_party=False, max_hp=350, current_hp=900, max_mp=30, current_mp=30, str_=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11)
+cloud = char(name='Cloud', level=7, level_threshold=[], in_party=True, ko=False, max_hp=322, current_hp=322, max_mp=50, current_mp=50, str_=12, defense=10, spd=10, mgatk=10, mgdef=10, luck=11, dex=10)
+tifa = char(name='Tifa', level=7, level_threshold=[], in_party=False, ko=False, max_hp=325, current_hp=325, max_mp=50, current_mp=60, str_=13, defense=9, spd=12, mgatk=12, mgdef=12, luck=10, dex=14)
+barret = char(name='Barret', level=7, level_threshold=[], in_party=False, ko=False, max_hp=350, current_hp=350, max_mp=30, current_mp=30, str_=10, defense=12, spd=8, mgatk=9, mgdef=10, luck=14, dex=11)
 
 ### Party management
 

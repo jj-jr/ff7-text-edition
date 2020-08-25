@@ -9,6 +9,9 @@ print('')
 
 ### Beginning of gameplay
 
+char.tifa.in_party = True
+char.barret.in_party = True
+
 enemy = [enemies.shinra_mech, enemies.shinra_soldier, enemies.shinra_dog]
 current_party = [char.cloud, char.tifa, char.barret]
 
@@ -17,11 +20,7 @@ current_party = [char.cloud, char.tifa, char.barret]
 #print(inventory.item_inventory)
 #print(art.tifa_image)
 
+enemy = [enemies.shinra_mech]
 b.battle(current_party, enemy)
-print(enemy)
-enemy = [enemies.shinra_mech, enemies.shinra_soldier, enemies.shinra_dog]
-print(enemy)
-b.battle(current_party, enemy)
-enemy = [enemies.shinra_mech, enemies.shinra_soldier, enemies.shinra_dog]
-b.battle(current_party, enemy)
+
 print(inventory.item_inventory)

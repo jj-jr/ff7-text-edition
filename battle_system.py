@@ -40,13 +40,20 @@ def battle (party, enemy):
         return random.choice(enemy)
 
     def enemy_target(party):
-        target = random.choice(party)
+        active_party = []
+        for good_guys in party:
+            if good_guys.ko is False:
+                active_party.append(good_guys)
+                print(active_party)
+            else:
+                pass
+        target = random.choice(active_party)
         return target
 
     def party_ko(party):
         ko_count = 0
         for good_guys in party:
-            if good_guys.current_hp <= 0:
+            if good_guys.ko == True:
                 ko_count += 1
             else:
                 pass
@@ -101,7 +108,7 @@ def battle (party, enemy):
         party_action = False
         enemy_action = False
         all_combatants = party + enemy
-        last_party_member_alive = bool
+        last_party_member_alive = False
 
         while enemy_defeat is False and party_defeat is False:
             if party_action is False and enemy_action is False:
@@ -143,40 +150,41 @@ def battle (party, enemy):
                     party_action = False
 
                 else:
-
                     print(combatant.name + ' attacked and dealt ' + str(party_attack) + ' damage. ' + target.name + ' has ' + str(
                         target.current_hp) + ' HP remaining.')
                     party_action = False
 
             else:
+
                 # if the enemy has 100 ATB
-                for combatant in enemy:
-                    enemy_attack = combatant.str_ * 3
-                    target = enemy_target(party)
-                    if combatant.atb >= 100:
-                        target.current_hp -= enemy_attack
-                        combatant.atb = 0
-                        party_ko(party)
-                        if target.current_hp <= 0 and last_party_member_alive is True:
-                        #    combatant.atb = 0
-                            party_defeat = True
-                            print(combatant.name + ' attacked and dealt ' + str(
-                                enemy_attack) + ' damage. The party has been defeated!')
-                            print('Game over.')
-                            break
-                        elif target.current_hp <= 0 and last_party_member_alive is False:
-                        #    combatant.atb = 0
-                            print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(
-                                enemy_attack) + ' damage. ' + target.name + ' has been defeated!')
-                            enemy_action = False
-                        else:
-                        #    combatant.atb = 0
-                            print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(
-                                enemy_attack) + ' damage. ' + target.name + ' has ' + str(
-                                target.current_hp) + ' HP remaining.')
-                            enemy_action = False
-                    else:
-                        continue
+                enemy_attack = combatant.str_ * 3
+                target = enemy_target(party)
+                target_index = all_combatants.index(target)
+                target.current_hp -= enemy_attack
+                combatant.atb = 0
+                last_party_member_alive = party_ko(party)
+
+                if target.current_hp <= 0 and last_party_member_alive is True:
+                    target.ko = True
+                    party_defeat == True
+                    print(combatant.name + ' attacked and dealt ' + str(
+                        enemy_attack) + ' damage. The party has been defeated!')
+                    print('Game over.')
+                    #all_combatants.pop(target_index)
+                    break
+                elif target.current_hp <= 0 and last_party_member_alive is False:
+                    target.ko = True
+                    all_combatants.pop(target_index)
+                    print('Popped ' + str(target_index))
+                    print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(
+                        enemy_attack) + ' damage. ' + target.name + ' has been defeated!')
+                    enemy_action = False
+                else:
+                    print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(
+                        enemy_attack) + ' damage. ' + target.name + ' has ' + str(
+                        target.current_hp) + ' HP remaining.')
+                    enemy_action = False
+
         else:
             pass
 
