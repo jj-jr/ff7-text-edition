@@ -2,7 +2,6 @@ gil = 0
 
 ### Inventory / item handling
 
-#items = []
 weapons = []
 item_inventory = {}
 key_items = []

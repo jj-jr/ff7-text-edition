@@ -44,7 +44,6 @@ def battle (party, enemy):
         for good_guys in party:
             if good_guys.ko is False:
                 active_party.append(good_guys)
-                print(active_party)
             else:
                 pass
         target = random.choice(active_party)
@@ -114,11 +113,14 @@ def battle (party, enemy):
             if party_action is False and enemy_action is False:
                 for combatant in all_combatants:
                     if combatant in party:
-                        if combatant.atb < 100:
-                            combatant.atb = party_atb(combatant, combatant.atb)
+                        if combatant.ko == True:
+                            combatant.atb = 0
                         else:
-                            party_action = True
-                            break
+                            if combatant.atb < 100:
+                                combatant.atb = party_atb(combatant, combatant.atb)
+                            else:
+                                party_action = True
+                                break
                     else:
                         if combatant.atb < 100:
                             combatant.atb = enemy_atb(combatant, combatant.atb)
@@ -133,20 +135,20 @@ def battle (party, enemy):
                 party_attack = combatant.str_ * 3
                 party_attack += attack_randomizer
                 combatant.atb = 0
-                target = party_target(enemy)
-                target_index = enemy.index(target)
+                target = party_target(all_combatants)
+                target_index = all_combatants.index(target)
                 target.current_hp -= party_attack
 
                 if target.current_hp <= 0 and len(enemy) == 1:
                     print(combatant.name + ' attacked and dealt ' + str(party_attack) + ' damage. ' + target.name + ' has been defeated!')
                     cf.space()
                     print('Battle over.')
-                    enemy.pop(target_index)
+                    all_combatants.pop(target_index)
                     enemy_defeat = True
 
                 elif target.current_hp <= 0 and len(enemy) != 0:
                     print(combatant.name + ' attacked and dealt ' + str(party_attack) + ' damage. ' + target.name + ' has been defeated!')
-                    enemy.pop(target_index)
+                    all_combatants.pop(target_index)
                     party_action = False
 
                 else:
@@ -155,11 +157,10 @@ def battle (party, enemy):
                     party_action = False
 
             else:
-
                 # if the enemy has 100 ATB
                 enemy_attack = combatant.str_ * 3
                 target = enemy_target(party)
-                target_index = all_combatants.index(target)
+                #target_index = party.index(target)
                 target.current_hp -= enemy_attack
                 combatant.atb = 0
                 last_party_member_alive = party_ko(party)
@@ -170,12 +171,9 @@ def battle (party, enemy):
                     print(combatant.name + ' attacked and dealt ' + str(
                         enemy_attack) + ' damage. The party has been defeated!')
                     print('Game over.')
-                    #all_combatants.pop(target_index)
                     break
                 elif target.current_hp <= 0 and last_party_member_alive is False:
                     target.ko = True
-                    all_combatants.pop(target_index)
-                    print('Popped ' + str(target_index))
                     print(combatant.name + ' attacked ' + target.name + ' and dealt ' + str(
                         enemy_attack) + ' damage. ' + target.name + ' has been defeated!')
                     enemy_action = False
